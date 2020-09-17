@@ -14,7 +14,6 @@ RUN chmod +x /install.sh
 
 ENV API_PORT=4000 \
     API_KEY=YOUR_AWESOME_AND_TOTALLY_SECRET_API_KEY \
-    UI_ORIGIN=http://localhost:${UI_PORT} \
     PLEX_URL=http://localhost:32400 \
     PLEX_TOKEN=YOUR_PLEX_TOKEN \
     SEAFILE_URL=http://localhost:8000 \
@@ -27,18 +26,14 @@ ENV API_PORT=4000 \
     UPTIME_ROBOT_KEY=YOUR_UPTIME_ROBOT_API_KEY \
     UPTIME_ROBOT_URL=https://api.uptimerobot.com/v2/getMonitors \
     UI_PORT=3000 \
-    REACT_APP_API_URL=http://localhost:${API_PORT} \
     REACT_APP_AUTH_ENDPOINT=/auth \
     REACT_APP_SEAFILE_ENDPOINT=/seafile \
     REACT_APP_PLEX_ENDPOINT=/plex \
     REACT_APP_UNIFI_ENDPOINT=/unifi \
     REACT_APP_NETDATA_DO_ENDPOINT=/netdata-do \
-    REACT_APP_NETDATA_DO_URL=${NETDATA_DO_URL} \
     REACT_APP_NETDATA_HOME_ENDPOINT=/netdata-home \
-    REACT_APP_NETDATA_HOME_URL=${NETDATA_HOME_URL} \
     REACT_APP_UPTIME_ROBOT_ENDPOINT=/uptime-robot \
-    PORT=${UI_PORT}
 
 EXPOSE 3000 4000
 
-CMD ["/install.sh"]
+CMD ["sh /install.sh"]
