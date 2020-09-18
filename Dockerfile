@@ -8,6 +8,7 @@ RUN apk update \
     nodejs \
     yarn \
     openssl \
+    nginx \
     socat
     
 COPY run.sh /
@@ -17,7 +18,9 @@ COPY nginx /tmp/
 COPY scripts /scripts/
 
 RUN chmod +x /run.sh \
-    && chmod +x /scripts/*
+    && chmod +x /scripts/* \
+    && mkdir -p /root/.acme.sh \
+    && ln -s /root/.acme.sh /.acme.sh
 
 ENV DOMAIN=domain.local \
     API_EXTERNAL_PORT=4400 \
@@ -41,8 +44,14 @@ ENV DOMAIN=domain.local \
     REACT_APP_NETDATA_DO_ENDPOINT=/netdata-do \
     REACT_APP_NETDATA_HOME_ENDPOINT=/netdata-home \
     REACT_APP_UPTIME_ROBOT_ENDPOINT=/uptime-robot \
-    CF_Email= \
-    CF_Key=
+    CF_Email="" \
+    CF_Key="" \
+    CF_Account_ID="" \
+    CF_Token="" \
+    AWS_ACCESS_KEY_ID="" \
+    AWS_SECRET_ACCESS_KEY="" \
+    FREEDNS_User="" \
+    FREEDNS_Password=""
 
 EXPOSE 80 443 3300 4400
 
