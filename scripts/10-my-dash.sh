@@ -59,5 +59,7 @@ echo -e ""
 echo -e "10-my-dash.sh: Starting yarn upgrade."
 echo -e ""
 yarn upgrade
-
+echo -e ""
+echo -e "10-my-dash.sh: Done my-dash setup."
+echo -e ""
 exit 0

@@ -132,5 +132,5 @@ else
         exit 0
     fi
 fi
-echo "30-domain.sh: Certificate requested and installed to nginx. Ending script."
+echo "30-domain.sh: Done certificate setup."
 exit 0
