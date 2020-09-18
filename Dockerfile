@@ -37,4 +37,4 @@ ENV DOMAIN=domain.local \
 
 EXPOSE 3000 4000
 
-CMD ["sh /install.sh"]
+CMD ["/bin/sh /install.sh"]
