@@ -3,14 +3,23 @@
 # Description: Build my-dash
 #
 
+echo -e ""
+echo -e "10-my-dash.sh: Cloning my-dash repository."
+echo -e ""
 git clone https://github.com/krestaino/my-dash.git /opt/my-dash
 
 cd /opt/my-dash
 
+echo -e ""
+echo -e "10-my-dash.sh: Cleaning DOMAIN (if needed)."
+echo -e ""
 DOMAIN=$(echo $DOMAIN | sed 's:/*$::')
+DOMAIN=$(echo $DOMAIN | sed -E 's|https?://||')
 
+echo -e ""
+echo -e "10-my-dash.sh: Creating environment."
+echo -e ""
 touch .env
-
 echo -e "API_PORT=4000" > .env
 echo -e "API_KEY=$API_KEY" >> .env
 echo -e "UI_ORIGIN=https://${DOMAIN}:${UI_EXTERNAL_PORT}" >> .env
@@ -38,10 +47,17 @@ echo -e "REACT_APP_NETDATA_HOME_URL=${NETDATA_HOME_URL}" >> .env
 echo -e "REACT_APP_UPTIME_ROBOT_ENDPOINT=$REACT_APP_UPTIME_ROBOT_ENDPOINT" >> .env
 echo -e "PORT=${UI_PORT}" >> .env
 
+echo -e ""
+echo -e "10-my-dash.sh: Starting yarn setup."
+echo -e ""
 yarn setup
-
+echo -e ""
+echo -e "10-my-dash.sh: Starting yarn build."
+echo -e ""
 yarn build
-
+echo -e ""
+echo -e "10-my-dash.sh: Starting yarn upgrade."
+echo -e ""
 yarn upgrade
 
 exit 0
