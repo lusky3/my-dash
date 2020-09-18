@@ -13,7 +13,7 @@ COPY run.sh /
 
 COPY nginx /tmp/
 
-COPY scripts /
+COPY scripts /scripts/
 
 RUN chmod +x /run.sh \
     && chmod +x /scripts/*
