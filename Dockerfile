@@ -6,14 +6,20 @@ RUN apk update \
     git \
     curl \
     nodejs \
-    yarn
+    yarn \
+    openssl
     
-COPY install.sh /
+COPY run.sh /
 
-RUN chmod +x /install.sh
+COPY nginx /tmp/
 
-ENV DOMAIN=http://domain.local \
-    API_PORT=4000 \
+COPY scripts /
+
+RUN chmod +x /run.sh \
+    && chmod +x /scripts/*
+
+ENV DOMAIN=domain.local \
+    API_EXTERNAL_PORT=4400 \
     API_KEY=YOUR_AWESOME_AND_TOTALLY_SECRET_API_KEY \
     PLEX_URL=http://localhost:32400 \
     PLEX_TOKEN=YOUR_PLEX_TOKEN \
@@ -26,15 +32,19 @@ ENV DOMAIN=http://domain.local \
     NETDATA_HOME_URL=http://localhost:19999 \
     UPTIME_ROBOT_KEY=YOUR_UPTIME_ROBOT_API_KEY \
     UPTIME_ROBOT_URL=https://api.uptimerobot.com/v2/getMonitors \
-    UI_PORT=3000 \
+    UI_EXTERNAL_PORT=3300 \
     REACT_APP_AUTH_ENDPOINT=/auth \
     REACT_APP_SEAFILE_ENDPOINT=/seafile \
     REACT_APP_PLEX_ENDPOINT=/plex \
     REACT_APP_UNIFI_ENDPOINT=/unifi \
     REACT_APP_NETDATA_DO_ENDPOINT=/netdata-do \
     REACT_APP_NETDATA_HOME_ENDPOINT=/netdata-home \
-    REACT_APP_UPTIME_ROBOT_ENDPOINT=/uptime-robot
+    REACT_APP_UPTIME_ROBOT_ENDPOINT=/uptime-robot \
+    CF_Email= \
+    CF_Key=
 
-EXPOSE 3000 4000
+EXPOSE 80 443 3300 4400
 
-CMD ["/bin/sh /install.sh"]
+CMD ["/bin/sh /run.sh"]
+
+VOLUME [ "/.acme.sh" ]
