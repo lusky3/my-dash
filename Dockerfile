@@ -7,7 +7,8 @@ RUN apk update \
     curl \
     nodejs \
     yarn \
-    openssl
+    openssl \
+    socat
     
 COPY run.sh /
 

@@ -14,6 +14,8 @@ fi
 # Check that acme doesn't already exist or update it if it does
 if [[ -f /.acme.sh/acme.sh ]]; then
     echo "20-domain.sh: acme.sh was already found. Running update."
+    # Add a link to acme.sh in bin for ease of access
+    ln -s /.acme.sh/acme.sh /usr/bin/acme.sh && \
     acme.sh --upgrade
 else
     echo "20-domain.sh: acme.sh was not found. Running install."
@@ -23,10 +25,7 @@ else
         # run the acme.sh installer
         ./acme.sh --install --home /.acme.sh && \
         # Add a link to acme.sh in bin for ease of access
-        ln -s /.acme.sh/acme.sh /usr/bin/acme.sh && \
-        # Certificates will be placed in /etc/ssl/certs
-        mkdir -p /etc/ssl/certs/api && \
-        mkdir -p /etc/ssl/private/api
+        ln -s /.acme.sh/acme.sh /usr/bin/acme.sh
 fi
 
 if [ ! "$(command -v acme.sh)" ]; then
@@ -66,12 +65,13 @@ else
         DNS_METHOD="--dns dns_freedns"
     # Fallback to Apache
     else
-        echo "20-domain.sh: DNS verification ENV values not found. Fallback to webroot (nginx) method."
-        DNS_METHOD="--nginx"
+        echo "20-domain.sh: DNS verification ENV values not found. Fallback to standalone method."
+        DNS_METHOD="--alpn --tlsport ${UI_EXTERNAL_PORT}"
     fi
 
     # Request the sertificate from Let'sEncrypt
     echo "20-domain.sh: Attempting to request certificate..."
+    service nginx stop
     acme.sh --issue $DNS_METHOD -d api.$DOMAIN${ECDSA:0:19}
     # Install the certificate
     if [[ -f /.acme.sh/api.$DOMAIN/api.${DOMAIN}.cer ]] || [[ -d /.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
@@ -109,13 +109,14 @@ else
         DNS_METHOD="--dns dns_freedns"
     # Fallback to Apache
     else
-        echo "20-domain.sh: DNS verification ENV values not found. Fallback to webroot (nginx) method."
-        DNS_METHOD="--nginx"
+        echo "20-domain.sh: DNS verification ENV values not found. Fallback to standalone method."
+        service nginx stop
+        DNS_METHOD="--alpn --tlsport ${UI_EXTERNAL_PORT}"
     fi
 
     # Request the sertificate from Let'sEncrypt
     echo "20-domain.sh: Attempting to request certificate..."
-    acme.sh --issue api.$DNS_METHOD -d api.$DOMAIN${ECDSA:0:19}
+    acme.sh --issue $DNS_METHOD -d api.$DOMAIN${ECDSA:0:19}
     # Install the certificate
     if [[ -f /.acme.sh/api.$DOMAIN/api.${DOMAIN}.cer ]] || [[ -d /.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
         echo "20-domain.sh: Certificate for $DOMAIN was found. Attempting to install to nginx..."
