@@ -2,14 +2,17 @@
 #
 # Description: Setup achme.sh and obtain Let'sEncrypt certificate
 #
-if [[ -z ${DOMAIN} ]]; then
-    echo "30-domain.sh: Domain ENV is empty. Kill script."
-    exit 1
-fi
 
-if [ -z $ECDSA ]; then
-    export ECDSA="true"
-fi
+case $DOMAIN in
+  "") echo "30-domain.sh: Domain ENV is empty. Kill script."; exit 1;;
+  *) ;;
+esac
+
+case $ECDSA in
+  false) export ECDSA="false";;
+  "") export ECDSA="true";;
+  *) export ECDSA="false";;
+esac
 
 # Check that acme doesn't already exist or update it if it does
 if [[ -f /root/.acme.sh/acme.sh ]]; then
@@ -36,13 +39,11 @@ if [ ! "$(command -v acme.sh)" ]; then
 fi
 
 # Check if ECDSA is wanted (Default = true)
-if [[ "${ECDSA}" -eq "true" ]]; then
-    echo "30-domain.sh: ECDSA certificate is wanted."
-    export ECDSA=" --keylength ec-256 --ecc"
-else
-    echo "30-domain.sh: RSA certificate is wanted."
-    export ECDSA=""
-fi
+
+case $ECDSA in
+  true) echo "30-domain.sh: ECDSA certificate is wanted."; export ECDSA=" --keylength ec-256 --ecc";;
+  *) echo "30-domain.sh: RSA certificate is wanted."; export ECDSA="";;
+esac
 
 # We don't want to waste our time if the certificates already exist
 if [[ -f /root/.acme.sh/${DOMAIN}/${DOMAIN}.cer ]] || [[ -f /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.cer ]]; then

@@ -9,7 +9,8 @@ RUN apk update \
     yarn \
     openssl \
     nginx \
-    socat
+    socat \
+    rc-update add nginx default
     
 COPY run.sh /
 
@@ -44,6 +45,7 @@ ENV DOMAIN=domain.local \
     REACT_APP_NETDATA_DO_ENDPOINT=/netdata-do \
     REACT_APP_NETDATA_HOME_ENDPOINT=/netdata-home \
     REACT_APP_UPTIME_ROBOT_ENDPOINT=/uptime-robot \
+    ECDSA="true" \
     CF_Email="" \
     CF_Key="" \
     CF_Account_ID="" \
