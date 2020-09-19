@@ -46,20 +46,20 @@ case $ECDSA in
 esac
 
 # We don't want to waste our time if the certificates already exist
-if [[ -f /root/.acme.sh/${DOMAIN}/${DOMAIN}.cer ]]; then
+if [[ -f /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.cer ]]; then
     echo "30-domain.sh: Certificate for $DOMAIN appears to already exist, so we will only try to install it."
     acme.sh --install-cert -d $DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
-elif [[ -f /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.cer ]]; then
+elif [[ -f /root/.acme.sh/${DOMAIN}/${DOMAIN}.cer ]]; then
     echo "30-domain.sh: Certificate for $DOMAIN appears to already exist, so we will only try to install it."
     acme.sh --install-cert -d $DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
 else
-    echo "30-domain.sh: Certificate for $DOMAIN does not appear to exist, so we will try to request it."
+    echo "30-domain.sh: Certificate for $DOMAIN does NOT appear to exist, so we will try to request it."
     # Cloudflare
     if [[ -n "${CF_Token}" && -n "${CF_Account_ID}" ]] || [[ -n "${CF_Key}" && -n "${CF_Email}" ]]; then
         DNS_METHOD="--dns dns_cf"
@@ -80,13 +80,13 @@ else
     /usr/sbin/nginx -s stop
     acme.sh --issue $DNS_METHOD -d $DOMAIN${ECDSA:0:19}
     # Install the certificate
-    if [[ -f /root/.acme.sh/$DOMAIN/${DOMAIN}.cer ]]; then
+    if [[ -f /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.cer ]]; then
         echo "30-domain.sh: Certificate for $DOMAIN was found. Attempting to install to nginx..."
         acme.sh --install-cert -d $DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
-    elif [[ -d /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.cer ]]; then
+    elif [[ -d /root/.acme.sh/${DOMAIN}/${DOMAIN}.cer ]]; then
         echo "30-domain.sh: Certificate for $DOMAIN was found. Attempting to install to nginx..."
         acme.sh --install-cert -d $DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
@@ -97,17 +97,16 @@ else
         echo "30-domain.sh: Certificate request may have failed. Run acme.sh manually."
         echo "30-domain.sh: This won't cause a script failure, but my-dash may not connect."
         echo "30-domain.sh: End script."
-        exit 0
     fi
 fi
 # We don't want to waste our time if the certificates already exist (api.domain)
-if [[ -f /root/.acme.sh/api.${DOMAIN}/api.${DOMAIN}.cer ]]; then
+if [[ -f /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
     echo "30-domain.sh: Certificate for api.$DOMAIN appears to already exist, so we will only try to install it."
     acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/api/priv.key  \
             --fullchain-file /etc/ssl/certs/api/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
-elif  [[ -f /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
+elif  [[ -f /root/.acme.sh/api.${DOMAIN}/api.${DOMAIN}.cer ]]; then
     echo "30-domain.sh: Certificate for api.$DOMAIN appears to already exist, so we will only try to install it."
     acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/api/priv.key  \
@@ -141,13 +140,13 @@ else
     echo "30-domain.sh: Attempting to request certificate..."
     acme.sh --issue $DNS_METHOD -d api.$DOMAIN${ECDSA:0:19}
     # Install the certificate
-    if [[ -f /root/.acme.sh/api.$DOMAIN/api.${DOMAIN}.cer ]]; then
+    if [[ -f /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
         echo "30-domain.sh: Certificate for api.$DOMAIN was found. Attempting to install to nginx..."
         acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
-     elif [[ -d /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
+     elif [[ -d /root/.acme.sh/api.${DOMAIN}/api.${DOMAIN}.cer ]]; then
         echo "30-domain.sh: Certificate for api.$DOMAIN was found. Attempting to install to nginx..."
         acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
