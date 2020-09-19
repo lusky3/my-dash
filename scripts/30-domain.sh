@@ -52,7 +52,6 @@ if [[ -f /root/.acme.sh/${DOMAIN}/${DOMAIN}.cer ]] || [[ -f /root/.acme.sh/${DOM
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
-    exit 0
 else
     echo "30-domain.sh: Certificate for $DOMAIN does not appear to exist, so we will try to request it."
     # Cloudflare
@@ -75,12 +74,12 @@ else
     /usr/sbin/nginx -s stop
     acme.sh --issue $DNS_METHOD -d api.$DOMAIN${ECDSA:0:19}
     # Install the certificate
-    if [[ -f /root/.acme.sh/api.$DOMAIN/api.${DOMAIN}.cer ]] || [[ -d /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
+    if [[ -f /root/.acme.sh/$DOMAIN/${DOMAIN}.cer ]] || [[ -d /root/.acme.sh/${DOMAIN}_ecc/${DOMAIN}.cer ]]; then
         echo "30-domain.sh: Certificate for api.$DOMAIN was found. Attempting to install to nginx..."
         acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/api/priv.key  \
             --fullchain-file /etc/ssl/certs/api/fullchain.pem \
-            --reloadcmd     "service nginx force-reload"
+            --reloadcmd     "/usr/sbin/nginx -s reload"
     else   
         echo "30-domain.sh: Certificate for $DOMAIN was Not Found."
         echo "30-domain.sh: Certificate request may have failed. Run acme.sh manually."
@@ -91,14 +90,14 @@ else
 fi
 # We don't want to waste our time if the certificates already exist (api.domain)
 if [[ -f /root/.acme.sh/api.${DOMAIN}/api.${DOMAIN}.cer ]] || [[ -f /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
-    echo "30-domain.sh: Certificate for $DOMAIN appears to already exist, so we will only try to install it."
+    echo "30-domain.sh: Certificate for api.$DOMAIN appears to already exist, so we will only try to install it."
     acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/api/priv.key  \
             --fullchain-file /etc/ssl/certs/api/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
     exit 0
 else
-    echo "30-domain.sh: Certificate for $DOMAIN does not appear to exist, so we will try to request it."
+    echo "30-domain.sh: Certificate for api.$DOMAIN does not appear to exist, so we will try to request it."
     # Cloudflare
     if [[ -n "${CF_Token}" && -n "${CF_Account_ID}" ]] || [[ -n "${CF_Key}" && -n "${CF_Email}" ]]; then
         DNS_METHOD="--dns dns_cf"
@@ -120,7 +119,7 @@ else
     acme.sh --issue $DNS_METHOD -d api.$DOMAIN${ECDSA:0:19}
     # Install the certificate
     if [[ -f /root/.acme.sh/api.$DOMAIN/api.${DOMAIN}.cer ]] || [[ -d /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
-        echo "30-domain.sh: Certificate for $DOMAIN was found. Attempting to install to nginx..."
+        echo "30-domain.sh: Certificate for api.$DOMAIN was found. Attempting to install to nginx..."
         acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
