@@ -11,7 +11,7 @@ mkdir -p /etc/nginx/snippets
 echo -e ""
 echo -e "20-nginx.sh: Move configuration"
 echo -e ""
-#cp /tmp/api.my-dash.conf /etc/nginx/conf.d/api.my-dash.conf
+cp /tmp/api.my-dash.conf /etc/nginx/conf.d/api.my-dash.conf
 cp /tmp/my-dash.conf /etc/nginx/conf.d/my-dash.conf
 cp /tmp/http-to-https.conf /etc/nginx/conf.d/http-to-https.conf
 cp /tmp/proxy-pass.conf /etc/nginx/snippets/proxy-pass.conf
@@ -27,10 +27,10 @@ echo -e ""
 echo -e "20-nginx.sh: Changing ports (if needed)."
 echo -e ""
 if [ $API_EXTERNAL_PORT != 4400 ]; then
-    sed -i 's/4400/${API_EXTERNAL_PORT}/g' /etc/nginx/conf.d/my-dash.conf
+    sed -i 's/4400/${API_EXTERNAL_PORT}/g' /etc/nginx/conf.d/api.my-dash.conf
 fi
 if [ $UI_EXTERNAL_PORT != 3300 ]; then
-    sed -i 's/3300/${API_EXTERNAL_PORT}/g' /etc/nginx/conf.d/my-dash.conf
+    sed -i 's/3300/${UI_EXTERNAL_PORT}/g' /etc/nginx/conf.d/my-dash.conf
 fi
 echo -e ""
 echo -e "20-nginx.sh: Done nginx setup."
