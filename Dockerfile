@@ -10,7 +10,7 @@ RUN apk update \
     openssl \
     nginx \
     socat \
-    rc-update add nginx default
+    && rc-update add nginx default
     
 COPY run.sh /
 
