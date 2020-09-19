@@ -8,11 +8,12 @@ RUN apk update \
     nodejs \
     yarn
     
-COPY install.sh /
+COPY run.sh /
 
-RUN chmod +x /install.sh
+RUN chmod +x /run.sh
 
-ENV API_PORT=4000 \
+ENV DOMAIN=domain.local \
+    API_PORT=4000 \
     API_KEY=YOUR_AWESOME_AND_TOTALLY_SECRET_API_KEY \
     PLEX_URL=http://localhost:32400 \
     PLEX_TOKEN=YOUR_PLEX_TOKEN \
@@ -36,4 +37,4 @@ ENV API_PORT=4000 \
 
 EXPOSE 3000 4000
 
-CMD ["sh /install.sh"]
+CMD ["/bin/sh /run.sh"]
