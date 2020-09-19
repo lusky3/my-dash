@@ -21,7 +21,6 @@ RUN chmod +x /run.sh \
     && chmod +x /scripts/* \
     && mkdir -p /root/.acme.sh \
     && ln -s /root/.acme.sh /.acme.sh \
-    && addgroup -g 1000 -S www-data \
     && adduser -u 1000 -D -S -G www-data www-data
 
 ENV DOMAIN=domain.local \
