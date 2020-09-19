@@ -20,7 +20,8 @@ COPY scripts /scripts/
 RUN chmod +x /run.sh \
     && chmod +x /scripts/* \
     && mkdir -p /root/.acme.sh \
-    && ln -s /root/.acme.sh /.acme.sh
+    && ln -s /root/.acme.sh /.acme.sh \
+    && adduser -S -D -H -G 'www-data' wwww-data
 
 ENV DOMAIN=domain.local \
     API_EXTERNAL_PORT=4400 \
