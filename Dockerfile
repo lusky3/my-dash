@@ -2,7 +2,7 @@ FROM alpine:3
 
 RUN apk update \
     && apk upgrade \
-    && apk add \
+    && apk --no-cache add \
     git \
     curl \
     nodejs \
@@ -10,6 +10,7 @@ RUN apk update \
     openssl \
     nginx \
     socat \
+    openrc \
     && rc-update add nginx default
     
 COPY run.sh /
