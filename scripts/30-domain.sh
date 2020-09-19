@@ -143,14 +143,14 @@ else
     if [[ -f /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
         echo "30-domain.sh: Certificate for api.$DOMAIN (ECC) was found. Attempting to install to nginx..."
         acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
-            --key-file       /etc/ssl/private/priv.key  \
-            --fullchain-file /etc/ssl/certs/fullchain.pem \
+            --key-file       /etc/ssl/private/api/priv.key  \
+            --fullchain-file /etc/ssl/certs/api/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
      elif [[ -d /root/.acme.sh/api.${DOMAIN}/api.${DOMAIN}.cer ]]; then
         echo "30-domain.sh: Certificate for api.$DOMAIN (RSA) was found. Attempting to install to nginx..."
         acme.sh --install-cert -d api.$DOMAIN \
-            --key-file       /etc/ssl/private/priv.key  \
-            --fullchain-file /etc/ssl/certs/fullchain.pem \
+            --key-file       /etc/ssl/private/api/priv.key  \
+            --fullchain-file /etc/ssl/certs/api/fullchain.pem \
             --reloadcmd     "/usr/sbin/nginx -s reload"
     else   
         echo "30-domain.sh: Certificate for api.$DOMAIN was Not Found."
