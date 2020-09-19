@@ -7,7 +7,7 @@ case $DOMAIN in
   "") echo "30-domain.sh: Domain ENV is empty. Kill script."; exit 1;;
   *) ;;
 esac
-
+export ECDSA=$ECDSA
 case $ECDSA in
   false) export ECDSA="false";;
   "") export ECDSA="true";;
