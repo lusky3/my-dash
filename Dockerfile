@@ -13,6 +13,7 @@ COPY run.sh /
 RUN chmod +x /run.sh
 
 ENV DOMAIN=domain.local \
+    PROTOCOL=https \
     API_PORT=4000 \
     API_KEY=YOUR_AWESOME_AND_TOTALLY_SECRET_API_KEY \
     PLEX_URL=http://localhost:32400 \
