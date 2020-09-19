@@ -9,9 +9,7 @@ RUN apk update \
     yarn \
     openssl \
     nginx \
-    socat \
-    openrc \
-    && rc-update add nginx default
+    socat
     
 COPY run.sh /
 

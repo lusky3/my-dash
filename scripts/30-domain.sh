@@ -51,7 +51,7 @@ if [[ -f /root/.acme.sh/${DOMAIN}/${DOMAIN}.cer ]] || [[ -f /root/.acme.sh/${DOM
     acme.sh --install-cert -d $DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
-            --reloadcmd     "service nginx force-reload"
+            --reloadcmd     "/usr/sbin/nginx -s reload"
     exit 0
 else
     echo "30-domain.sh: Certificate for $DOMAIN does not appear to exist, so we will try to request it."
@@ -72,7 +72,7 @@ else
 
     # Request the sertificate from Let'sEncrypt
     echo "30-domain.sh: Attempting to request certificate..."
-    service nginx stop
+    /usr/sbin/nginx -s stop
     acme.sh --issue $DNS_METHOD -d api.$DOMAIN${ECDSA:0:19}
     # Install the certificate
     if [[ -f /root/.acme.sh/api.$DOMAIN/api.${DOMAIN}.cer ]] || [[ -d /root/.acme.sh/api.${DOMAIN}_ecc/api.${DOMAIN}.cer ]]; then
@@ -95,7 +95,7 @@ if [[ -f /root/.acme.sh/api.${DOMAIN}/api.${DOMAIN}.cer ]] || [[ -f /root/.acme.
     acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/api/priv.key  \
             --fullchain-file /etc/ssl/certs/api/fullchain.pem \
-            --reloadcmd     "service nginx force-reload"
+            --reloadcmd     "/usr/sbin/nginx -s reload"
     exit 0
 else
     echo "30-domain.sh: Certificate for $DOMAIN does not appear to exist, so we will try to request it."
@@ -111,7 +111,7 @@ else
     # Fallback to Apache
     else
         echo "30-domain.sh: DNS verification ENV values not found. Fallback to standalone method."
-        service nginx stop
+        /usr/sbin/nginx -s stop
         DNS_METHOD="--alpn --tlsport ${UI_EXTERNAL_PORT}"
     fi
 
@@ -124,7 +124,7 @@ else
         acme.sh --install-cert -d api.$DOMAIN${ECDSA:19:25} \
             --key-file       /etc/ssl/private/priv.key  \
             --fullchain-file /etc/ssl/certs/fullchain.pem \
-            --reloadcmd     "service nginx force-reload"
+            --reloadcmd     "/usr/sbin/nginx -s reload"
     else   
         echo "30-domain.sh: Certificate for api.$DOMAIN was Not Found."
         echo "30-domain.sh: Certificate request may have failed. Run acme.sh manually."
